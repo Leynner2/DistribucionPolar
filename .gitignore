@@ -1,0 +1,16 @@
+## .NET build output
+**/bin/
+**/obj/
+
+## Visual Studio and VS Code
+.vs/
+.vscode/
+
+## User-specific files
+*.user
+*.suo
+
+## Test and coverage output
+TestResults/
+coverage/
+
