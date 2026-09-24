@@ -79,4 +79,7 @@ app.MapGet("/", () => Results.Content(
 app.MapGet("/products", (IDistributionService distributionService) =>
     Results.Ok(distributionService.GetProducts()));
 
+app.MapGet("/test/exception", (_) =>
+    throw new Exception("Simulated unhandled exception for middleware testing."));
+
 app.Run();

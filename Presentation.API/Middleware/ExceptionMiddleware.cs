@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 namespace Presentation.API.Middleware;
 
@@ -52,6 +53,6 @@ public sealed class ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionM
             Instance = context.Request.Path
         };
 
-        await context.Response.WriteAsJsonAsync(problem);
+        await context.Response.WriteAsync(JsonSerializer.Serialize(problem));
     }
 }

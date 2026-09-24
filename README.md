@@ -86,6 +86,21 @@ Ejemplo con PowerShell:
 Invoke-RestMethod http://localhost:5249/products
 ```
 
+### Prueba del middleware de excepciones
+
+El endpoint `GET /test/exception` simula una excepcion no controlada para comprobar
+el funcionamiento de `ExceptionMiddleware` desde Swagger/OpenAPI o Postman.
+
+Con la API ejecutandose, crear en Postman una solicitud:
+
+```http
+GET http://localhost:5249/test/exception
+```
+
+La respuesta esperada es `500 Internal Server Error` con el encabezado
+`Content-Type: application/problem+json`. El cuerpo contiene el mensaje generico
+del servidor y no expone el stack trace.
+
 En desarrollo, el documento OpenAPI se expone en:
 
 ```text
