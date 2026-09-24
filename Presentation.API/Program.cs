@@ -1,10 +1,20 @@
+using Core.Application.Abstractions;
+using Core.Application.Services;
+using Infrastructure.Persistence;
+using Presentation.API.Middleware;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+builder.Services.AddSingleton<IProductRepository, InMemoryProductRepository>();
+builder.Services.AddScoped<IDistributionService, DistributionService>();
+builder.Services.AddTransient<IRequestIdGenerator, RequestIdGenerator>();
 
 var app = builder.Build();
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 if (app.Environment.IsDevelopment())
 {
@@ -65,5 +75,8 @@ app.MapGet("/", () => Results.Content(
     </html>
     """,
     "text/html; charset=utf-8"));
+
+app.MapGet("/products", (IDistributionService distributionService) =>
+    Results.Ok(distributionService.GetProducts()));
 
 app.Run();
