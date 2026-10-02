@@ -1,0 +1,17 @@
+**/bin/
+**/obj/
+**/.vs/
+**/.vscode/
+**/*.user
+.git/
+.postman/
+postman/
+docs/
+docker/
+Core.Domain.Tests/
+Core.Application.Tests/
+TestResults/
+coverage/
+Dockerfile
+docker-compose.yml
+README.md

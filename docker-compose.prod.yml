@@ -1,0 +1,38 @@
+# Entorno Production: sin Swagger, sin puertos de BD, secretos obligatorios en .env.production
+# (ver .env.production.example), reinicio automático y límites de recursos.
+# Publicar detrás de un proxy inverso con HTTPS (Nginx, Traefik, Caddy...).
+services:
+  postgres:
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Defina POSTGRES_PASSWORD en .env.production}
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 1g
+
+  api:
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ConnectionStrings__DefaultConnection: "Host=postgres;Port=5432;Database=${POSTGRES_DB:-distribucion_polar};Username=${POSTGRES_USER:-polar};Password=${POSTGRES_PASSWORD:?Defina POSTGRES_PASSWORD}"
+      # Origen del frontend autorizado por CORS (vacío = ninguno).
+      Cors__AllowedOrigins__0: ${CORS_ORIGIN:-}
+      JwtSettings__Key: ${JWT_KEY:?Defina JWT_KEY (mínimo 32 caracteres) en .env.production}
+      # true solo en el despliegue que debe aplicar migraciones; alternativa: docs/fase2/InitialCatalog.sql.
+      Database__MigrateOnStartup: ${MIGRATE_ON_STARTUP:-true}
+      # Administrador inicial: solo se crea si la tabla Users está vacía.
+      SeedUsers__0__Username: ${ADMIN_USERNAME:-admin}
+      SeedUsers__0__Email: ${ADMIN_EMAIL:?Defina ADMIN_EMAIL en .env.production}
+      SeedUsers__0__FullName: ${ADMIN_FULLNAME:-Administrador del Sistema}
+      SeedUsers__0__Password: ${ADMIN_PASSWORD:?Defina ADMIN_PASSWORD en .env.production}
+      SeedUsers__0__Role: Admin
+      SeedUsers__0__CanChangeAttendant: "true"
+    ports:
+      - "${API_PORT:-8082}:8080"
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 512m

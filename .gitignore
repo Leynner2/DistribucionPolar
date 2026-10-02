@@ -14,3 +14,8 @@
 TestResults/
 coverage/
 
+
+## Secretos de entorno (solo se versionan los *.example)
+.env
+.env.*
+!.env.*.example
