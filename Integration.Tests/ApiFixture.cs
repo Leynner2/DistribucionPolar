@@ -19,9 +19,7 @@ public sealed class ApiFixture : IAsyncLifetime
     public static readonly Guid BeveragesCategoryId = Guid.Parse("b2222222-2222-4222-8222-222222222222");
     public static readonly Guid SeedEmployeeId = Guid.Parse("00000100-0000-4000-8000-000000000001");
 
-    private readonly PostgreSqlContainer database = new PostgreSqlBuilder()
-        .WithImage("postgres:15-alpine")
-        .Build();
+    private readonly PostgreSqlContainer database = new PostgreSqlBuilder("postgres:15-alpine").Build();
 
     public WebApplicationFactory<Program> Factory { get; private set; } = default!;
 
